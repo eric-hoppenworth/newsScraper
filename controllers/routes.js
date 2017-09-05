@@ -1,24 +1,28 @@
+var routes = require("express").Router();
+// Require request and cheerio. This makes the scraping possible
+var request = require("request");
+var cheerio = require("cheerio");
 
-
-app.get("/retrieve",function(req,res){
-	scrapeMe().then(function(data){
+routes.get("/retrieve",function(req,res){
+	routes.scrapeMe().then(function(data){
 		res.json(data);
 	});
 });
 
-app.get("/store",function(req,res){
-	scrapeMe().then(function(data){
+routes.get("/store",function(req,res){
+	routes.scrapeMe().then(function(data){
 		db.scrapedData.insert(data);
 		res.send("stored!")
 	});
 });
 
-function scrapeMe(){
-	var url = "http://money.cnn.com"
+routes.scrapeMe = function(){
+	console.log("function is running");
+	var myUrl = "http://money.cnn.com";
 	// Make a request call to grab the HTML body from the site of your choice
 	return new Promise(function(resolve,reject){
-		request(url, function(error, response, html) {
-
+		request(myUrl, function(error, response, html) {
+			console.log("url pinged");
 		  // Load the HTML into cheerio and save it to a variable
 		  // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
 		  var $ = cheerio.load(html);
@@ -31,7 +35,7 @@ function scrapeMe(){
 		  // but be sure to visit the package's npm page to see how it works
 		  $("a.homepage-stack-hed").each(function(i, element) {
 
-		    var link = url + $(element).attr("href");
+		    var link = myUrl + $(element).attr("href");
 		    var title = $(element).children().text();
 
 		    // Save these results in an object that we'll push into the results array we defined earlier
@@ -43,4 +47,6 @@ function scrapeMe(){
 		  resolve(results);
 		});
 	});
-}
+};
+
+module.exports = routes;

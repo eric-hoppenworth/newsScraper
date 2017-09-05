@@ -4,9 +4,8 @@
 // Dependencies
 var express = require("express");
 var mongojs = require("mongojs");
-// Require request and cheerio. This makes the scraping possible
-var request = require("request");
-var cheerio = require("cheerio");
+
+var exphbs = require("express-handlebars");
 var path = require("path");
 
 // Initialize Express
@@ -18,7 +17,7 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;
 
-var routes = require("./controllers/burgers_controller.js");
+var routes = require("./controllers/routes.js");
 
 //use handlebars
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
