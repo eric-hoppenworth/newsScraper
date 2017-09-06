@@ -1,52 +1,91 @@
-var routes = require("express").Router();
 // Require request and cheerio. This makes the scraping possible
 var request = require("request");
 var cheerio = require("cheerio");
+//connect models
 
-routes.get("/retrieve",function(req,res){
-	routes.scrapeMe().then(function(data){
-		res.json(data);
-	});
-});
 
-routes.get("/store",function(req,res){
-	routes.scrapeMe().then(function(data){
-		db.scrapedData.insert(data);
-		res.send("stored!")
-	});
-});
+module.exports = function(routes,mongoose){
+	var models = require("../models/models.js")(mongoose);
+	const Article = models.Article;
+	const Comment = models.Comment;
 
-routes.scrapeMe = function(){
-	console.log("function is running");
-	var myUrl = "http://money.cnn.com";
-	// Make a request call to grab the HTML body from the site of your choice
-	return new Promise(function(resolve,reject){
-		request(myUrl, function(error, response, html) {
-			console.log("url pinged");
-		  // Load the HTML into cheerio and save it to a variable
-		  // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
-		  var $ = cheerio.load(html);
-
-		  // An empty array to save the data that we'll scrape
-		  var results = [];
-
-		  // Select each element in the HTML body from which you want information.
-		  // NOTE: Cheerio selectors function similarly to jQuery's selectors,
-		  // but be sure to visit the package's npm page to see how it works
-		  $("a.homepage-stack-hed").each(function(i, element) {
-
-		    var link = myUrl + $(element).attr("href");
-		    var title = $(element).children().text();
-
-		    // Save these results in an object that we'll push into the results array we defined earlier
-		    results.push({
-		      title: title,
-		      link: link
-		    });
-		  });
-		  resolve(results);
+	//scrapes articles and stores them in the database
+	routes.get("/store",function(req,res){
+		scrapeMe().then(function(data){
+			for (var i =0 ; i< data.length; i++){
+				let myArticle = new Article(data[i]);
+				//only add the new item if it doesn't exist.
+				//we check by headline;
+				Article.findOneAndUpdate(
+					{headline: myArticle.headline},
+					{
+						headline: myArticle.headline,
+						link: myArticle.link,
+						summary: myArticle.summary
+					},
+					{upsert: true},
+					function(err,data){
+						if (err){
+							return console.error(err);
+						}
+					}
+				);
+			}
+			res.send("stored!");
 		});
 	});
-};
 
-module.exports = routes;
+	//gets all articles from the database.
+	routes.get("/read",function(req,res){
+		Article.find().populate('comments').exec(function(err,data){
+			if (err){
+				return console.error(err);
+			}
+			res.json(data);
+		});
+	});
+
+	//add a comment
+	//(newComment comes in with author, content, and article(id) )
+	routes.post("/comment",function(req,res){
+		var newComment = new Comment(req.body);
+		newComment.save(function(err,result){
+			if(err){
+				return console.error(err);
+			}
+			Article.findOneAndUpdate(
+				{_id: newComment.article},
+				{$push: {comments: result._id}},
+				function(err,result){
+					if(err){
+						return console.error(err);
+					}
+					res.send(result);
+				}
+			);
+		});
+	});
+
+	scrapeMe = function(){
+		var myUrl = "https://reason.com/";
+		return new Promise(function(resolve,reject){
+			request(myUrl,function(error,response,htmlPage){
+				var $ = cheerio.load(htmlPage);
+
+				var results = [];
+				$("li.post").each(function(i,element){
+					if(i < 20){
+						let link = "https:" + $(element).children("a").attr("href");
+						results.push({
+							headline: $(element).children("h3").text(),
+							link: link,
+							summary: $(element).children("h4").text()
+							imgUrl: $(element).children("img").attr("href")
+						});
+					}
+				});
+				resolve(results);
+			});
+		});
+	}
+}

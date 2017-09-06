@@ -3,7 +3,8 @@
 
 // Dependencies
 var express = require("express");
-var mongojs = require("mongojs");
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
 
 var exphbs = require("express-handlebars");
 var path = require("path");
@@ -17,28 +18,27 @@ app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080;
 
-var routes = require("./controllers/routes.js");
+//connect router
+var routes = require("./controllers/routes.js")(app,mongoose);
 
 //use handlebars
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
-//connect router
-app.use("/",routes);
+
 
 //make static folder
 app.use('/assets', express.static(path.join(__dirname, 'public/assets')));
 
-var databaseUrl = "scraper";
-var collections = ["scrapedData"];
-
-// Hook mongojs configuration to the db variable
-var db = mongojs(databaseUrl, collections);
-db.on("error", function(error) {
-  console.log("Database Error:", error);
+// Hook mongoose configuration to the db variable
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  // we're connected!
+  	console.log("mogoose running");
+  	app.listen(3000, function() {
+	  console.log("App running on port 3000!");
+	});
 });
 
 
-app.listen(3000, function() {
-  console.log("App running on port 3000!");
-});
 
