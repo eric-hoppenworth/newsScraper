@@ -19,16 +19,10 @@ module.exports = function(mongoose){
 	var Comment = mongoose.model("Comment",commentSchema);
 
 
-
-
-
-
-
-
 	return {
 		Article: Article,
 		Comment: Comment
 	}
 
-}
+};
 

@@ -1,0 +1,29 @@
+#crawlerContainer{
+    overflow-x:scroll;
+    overflow-y:hidden;
+    height:30vh;
+    width:100%;
+    padding: 0 15px;
+    background: lightgrey;
+}
+
+#crawlerContainer::-webkit-scrollbar { 
+    display: none; 
+}
+
+#articleCrawler li{
+    padding:0 15px;
+    margin: 0 15px;
+    /*border: 1px solid black;*/
+    height:100%;
+    display: inline-block;
+    width:200px;
+    white-space: normal;
+    vertical-align:middle;
+}
+
+
+#articleCrawler {
+	height: 100%;
+	white-space:nowrap;
+}

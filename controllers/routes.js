@@ -21,7 +21,8 @@ module.exports = function(routes,mongoose){
 					{
 						headline: myArticle.headline,
 						link: myArticle.link,
-						summary: myArticle.summary
+						summary: myArticle.summary,
+						imgUrl: myArticle.imgUrl
 					},
 					{upsert: true},
 					function(err,data){
@@ -74,13 +75,14 @@ module.exports = function(routes,mongoose){
 
 				var results = [];
 				$("li.post").each(function(i,element){
+					var myA = $(element).children("a").eq(0);
 					if(i < 20){
-						let link = "https:" + $(element).children("a").attr("href");
+						let link = "https:" + myA.attr("href");
 						results.push({
 							headline: $(element).children("h3").text(),
 							link: link,
-							summary: $(element).children("h4").text()
-							imgUrl: $(element).children("img").attr("href")
+							summary: $(element).children("h4").text(),
+							imgUrl: $(element).find("img").attr("src")
 						});
 					}
 				});
