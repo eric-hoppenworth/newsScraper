@@ -1,9 +1,10 @@
+body {
+	overflow-x: hidden;
+}
 #crawlerContainer{
     overflow-x:scroll;
     overflow-y:hidden;
-    height:30vh;
-    width:100%;
-    padding: 0 15px;
+    height:25vh;
     background: lightgrey;
 }
 
@@ -12,7 +13,6 @@
 }
 
 #articleCrawler li{
-    padding:0 15px;
     margin: 0 15px;
     /*border: 1px solid black;*/
     height:100%;
@@ -20,10 +20,56 @@
     width:200px;
     white-space: normal;
     vertical-align:middle;
+    padding-top: 15px;
+    font-size: 12px;
 }
 
 
 #articleCrawler {
 	height: 100%;
 	white-space:nowrap;
+
+}
+
+.mainPic{
+	height: 300px;
+}
+
+#commentsHolder{
+	background: lightblue;
+	padding-top: 15px;
+}
+#storyHolder {
+	padding: 0 0 0 15px;
+}
+
+#storyHolder, #commentsHolder{
+	
+	min-height: 90vh;
+}
+.footer{
+	height: 75px;
+	background: darkgrey;
+}
+
+#rightArrow{
+	position: absolute;
+	right:0;
+	top: 10vh;
+	opacity: 0.5;
+	font-size: 30px;
+}
+
+.form-control{
+	width: 90%;
+}
+.card{
+	width: 70%;
+	left:15%;
+	margin-top: 25px;
+}
+
+#storyHolder iframe{
+	height: 100%;
+	width: 100%;
 }

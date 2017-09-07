@@ -9,6 +9,16 @@ module.exports = function(routes,mongoose){
 	const Article = models.Article;
 	const Comment = models.Comment;
 
+	routes.get("/",function(req,res){
+		Article.find().populate('comments').exec(function(err,data){
+			if (err){
+				return console.error(err);
+			}
+			res.render("index",{data:data});
+		});
+		
+	});
+
 	//scrapes articles and stores them in the database
 	routes.get("/store",function(req,res){
 		scrapeMe().then(function(data){
@@ -24,10 +34,12 @@ module.exports = function(routes,mongoose){
 						summary: myArticle.summary,
 						imgUrl: myArticle.imgUrl
 					},
-					{upsert: true},
+					{upsert: true,new:true},
 					function(err,data){
 						if (err){
 							return console.error(err);
+						} else {
+
 						}
 					}
 				);
@@ -89,5 +101,6 @@ module.exports = function(routes,mongoose){
 				resolve(results);
 			});
 		});
-	}
+	};
+
 }

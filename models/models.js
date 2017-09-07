@@ -6,6 +6,7 @@ module.exports = function(mongoose){
 		link: String,
 		summary: String,
 		imgUrl: String,
+		bigImg: String,
 		comments: [{ type: Schema.Types.ObjectId, ref: 'Comment' }]
 	});
 

@@ -1,0 +1,58 @@
+<div id= "rightArrow" class = "text-center"> more <br> > </div>
+
+<div class = "row text-center" id ="crawlerContainer">
+	<div class = "col">
+		<ul id= "articleCrawler">
+		<!-- dynamically loaded li's -->
+		{{#each data}}
+			<li class = "articleThumb" data-id = "{{_id}}" data-toggle="tooltip" data-placement="bottom" title="{{summary}}">
+				<img class = "thumbnail" src="{{imgUrl}}">
+				<br>
+				{{ headline }}
+			</li>
+		{{/each}}
+			<!-- end cap so that last stroy is readable -->
+			<li></li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+
+	<div id="storyHolder" class = "text-center col-6">
+		<iframe src="{{data.0.link}}">
+		</iframe>
+	</div>
+
+
+	<div id = "commentsHolder" class = "col-6">
+		<form>
+	  		<div class="form-group">
+	    		<label for="commentAuthor">Author:</label>
+	    		<input type="text" class="form-control" id="commentAuthor" placeholder="anonymous">
+	  		</div>
+	  		<div class="form-group">
+				<label for="exampleFormControlTextarea1">Example textarea</label>
+				<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+			</div>
+			<button type="submit" class="btn btn-primary" data-id= "{{data.0._id}}">Submit</button>
+		</form>
+		<!-- dynamically loaded comments -->
+		{{#each data.0.comments}}
+		<div class="card">
+			<div class="card-body">
+				<h4 class="card-title">{{author}}</h4>
+				<p class="card-text">{{content}}</p>
+			</div>
+		</div>
+		{{/each}}
+
+		<div class="card">
+		</div>
+	</div>
+</div>
+<div class = "row footer text-center">
+	<div class = "col">
+		<p>Eric Hoppenworth</p>
+		<p>All stories and content provided by and property of Reason.com </p>
+	</div>
+</div>
