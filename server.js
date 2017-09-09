@@ -40,8 +40,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   // we're connected!
   	console.log("mogoose running");
-  	app.listen(3000, function() {
-	  console.log("App running on port 3000!");
+  	app.listen(port, function() {
+	  console.log("App running on port"+port);
 	});
 });
 
