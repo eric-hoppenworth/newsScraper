@@ -10,7 +10,6 @@ if (process.env.PORT){
 	mongoose.connect('mongodb://localhost/test');
 }
 
-
 var exphbs = require("express-handlebars");
 var path = require("path");
 
@@ -26,8 +25,17 @@ var port = process.env.PORT || 8080;
 //connect router
 var routes = require("./controllers/routes.js")(app,mongoose);
 
+//attatch helper
+var handlebars = exphbs.create({
+	defaultLayout: "main",
+	helpers:{
+		'reverse':function(arr){
+			arr.reverse();
+		}
+	}
+});
 //use handlebars
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine("handlebars", handlebars.engine);
 app.set("view engine", "handlebars");
 
 
