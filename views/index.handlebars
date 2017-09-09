@@ -5,7 +5,7 @@
 		<ul id= "articleCrawler">
 		<!-- dynamically loaded li's -->
 		{{#each data}}
-			<li class = "articleThumb" data-id = "{{_id}}" data-toggle="tooltip" data-placement="bottom" title="{{summary}}">
+			<li class = "articleThumb" data-link="{{link}}" data-id = "{{_id}}" data-toggle="tooltip" data-placement="bottom" title="{{summary}}">
 				<img class = "thumbnail" src="{{imgUrl}}">
 				<br>
 				{{ headline }}
@@ -31,22 +31,23 @@
 	    		<input type="text" class="form-control" id="commentAuthor" placeholder="anonymous">
 	  		</div>
 	  		<div class="form-group">
-				<label for="exampleFormControlTextarea1">Example textarea</label>
-				<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+				<label for="commentContent">Comment:</label>
+				<textarea class="form-control" id="commentContent" rows="3"></textarea>
 			</div>
-			<button type="submit" class="btn btn-primary" data-id= "{{data.0._id}}">Submit</button>
+			<button id= "newComment" type="submit" class="btn btn-primary" data-id= "{{data.0._id}}">Submit</button>
 		</form>
 		<!-- dynamically loaded comments -->
+		<div id = "cardHolder">
 		{{#each data.0.comments}}
-		<div class="card">
-			<div class="card-body">
-				<h4 class="card-title">{{author}}</h4>
-				<p class="card-text">{{content}}</p>
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">{{author}}</h4>
+					<p class="card-text">{{content}}</p>
+				</div>
 			</div>
-		</div>
 		{{/each}}
-
-		<div class="card">
+			<div class="card">
+			</div>
 		</div>
 	</div>
 </div>

@@ -10,13 +10,23 @@ module.exports = function(routes,mongoose){
 	const Comment = models.Comment;
 
 	routes.get("/",function(req,res){
-		Article.find().populate('comments').exec(function(err,data){
+		Article.find().sort({_id:-1}).limit(25).populate('comments').exec(function(err,data){
 			if (err){
 				return console.error(err);
 			}
 			res.render("index",{data:data});
 		});
 		
+	});
+
+	routes.get("/findOne/:id",function(req,res){
+		var id = req.params.id;
+		Article.findOne({_id: id}).populate("comments").exec(function(err,data){
+			if(err){
+				return console.error(err);
+			}
+			res.json(data);
+		});
 	});
 
 	//scrapes articles and stores them in the database

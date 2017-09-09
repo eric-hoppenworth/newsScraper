@@ -4,7 +4,12 @@
 // Dependencies
 var express = require("express");
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+if (process.env.PORT){
+	mongoose.connect('mongodb://heroku_2h7qt7dd:di3rv1j843isogfots359u6iff@ds111204.mlab.com:11204/heroku_2h7qt7dd');
+} else {
+	mongoose.connect('mongodb://localhost/test');
+}
+
 
 var exphbs = require("express-handlebars");
 var path = require("path");

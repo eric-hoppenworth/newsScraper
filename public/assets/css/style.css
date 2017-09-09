@@ -12,7 +12,7 @@ body {
     display: none; 
 }
 
-#articleCrawler li{
+.articleThumb{
     margin: 0 15px;
     /*border: 1px solid black;*/
     height:100%;
