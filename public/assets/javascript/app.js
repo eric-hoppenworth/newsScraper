@@ -51,6 +51,8 @@ $("#newComment").on("click",function(event){
 
 		$("#cardHolder").prepend(htmlString);
 	});
+	$("#commentAuthor").val("");
+	$("#commentContent").val("");
 });
 
 //ask the server to store any new articles
